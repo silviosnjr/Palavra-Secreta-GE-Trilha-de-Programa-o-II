@@ -10,6 +10,7 @@ const Game = ({
   wrongLetters,
   guesses,
   score,
+  time
 }) => {
   const [letter, setLetter] = useState("");
 
@@ -30,13 +31,14 @@ const Game = ({
 
   return (
     <div className="game">
+      <h2>Tempo restante: {time}s</h2>
       <p className="points"></p>
       <span>Pontuação: {score}</span>
       <h1>Adivinhe a palavra:</h1>
       <h3 className="tip">
         Dica sobre a palavra: <span>{pickedCategory}</span>
       </h3>
-      <p>Você ainda tem {guesses} tentativas</p>
+      <h3>Você ainda tem {guesses} tentativas</h3>
       <div className="wordContainer">
         {letters.map((letter, i) =>
           guessedLetters.includes(letter) ? (

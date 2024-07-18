@@ -19,7 +19,7 @@ const stages = [
   { id: 3, name: "end" },
 ];
 
-const guessesQtd = 3;
+const guessesQtd = 5;
 
 function App() {
   const [gameStage, setGameStage] = useState(stages[0].name);
@@ -33,6 +33,27 @@ function App() {
   const [wrongLetters, setWrongLetters] = useState([]);
   const [guesses, setGuesses] = useState(guessesQtd);
   const [score, setScore] = useState(0);
+
+  //State para guardar a palavra sorteada e exibir no final
+  const [word, setWord] = useState("");
+
+  //Cronometer
+  const [time, setTime] = useState(40); // Tempo inicial em segundos
+
+  useEffect(() => {
+    if (gameStage === stages[1].name && time > 0) {
+      const timer = setInterval(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }
+  
+    if (time === 0) {
+      setGameStage(stages[2].name);
+    }
+  }, [time, gameStage]);
+  
 
   const pickWordAndCategory = useCallback(() => {
     //pick a random category
@@ -50,26 +71,28 @@ function App() {
 
   //starts the secret word game
   const startGame = useCallback(() => {
-    //clear all letters
+    // clear all letters
     clearLetterStates();
-
-    //pick word and pick category
+    setTime(40); // Resetar o cronômetro
+  
+    // pick word and pick category
     const { word, category } = pickWordAndCategory();
-
-    //create a array of letters
+  
+    // create an array of letters
     let wordLetters = word.split("");
-    //wordLetters[0] = wordLetters[0].toLowerCase()
     wordLetters = wordLetters.map((l) => l.toLowerCase());
-
+  
     console.log(word, category);
     console.log(wordLetters);
+    setWord(word);
 
-    //fill states
+    // fill states
     setPickedWord(word);
     setPickedCategory(category);
     setLetters(wordLetters);
     setGameStage(stages[1].name);
-  },[pickWordAndCategory]);
+  }, [pickWordAndCategory]);
+  
 
   //process the letter input
   const verifyLetter = (letter) => {
@@ -120,7 +143,7 @@ function App() {
     const uniqueLetter = [...new Set(letters)]
 
     //win condition
-    if(guessedLetters.length === uniqueLetter.length) {
+    if(guessedLetters.length === uniqueLetter.length && gameStage === "game") {
       //add score
       setScore((actualScore)=>actualScore += 100)
       //restart game
@@ -133,7 +156,8 @@ function App() {
   const retry = () => {
     setScore(0);
     setGuesses(guessesQtd);
-    setGameStage(stages[0].name);
+    setTime(40); // Resetar o cronômetro
+    setGameStage(stages[0].name); // Define o estado como 'start'
   };
 
   return (
@@ -149,9 +173,10 @@ function App() {
           wrongLetters={wrongLetters}
           guesses={guesses}
           score={score}
+          time={time} // Passar o tempo como prop
         />
       )}
-      {gameStage === "end" && <GameOver retry={retry} score={score} />}
+      {gameStage === "end" && <GameOver retry={retry} score={score} word={word} />}
     </div>
   );
 }
