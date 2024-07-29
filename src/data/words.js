@@ -1,5 +1,7 @@
 export const wordsList = {
-  "palavra chave no javascript": ["function", "const", "let", "if", "else", "for"],
+  "palavra chave no JavaScript": ["function", "const", "let", "if", "else", "for"],
   "elemento HTML": ["div", "h1", "button", "body", "head", "title"],
-  "propriedade CSS": ["style", "padding", "color", "display", "flex", "font-size"]
+  "propriedade CSS": ["style", "padding", "color", "display", "font-size"],
+  "manipulando o DOM com JavaScript": ["document", "querySelector", "createElement", "textcontent"],
+  "Ferramentas de programação": ["LiveServer", "DevTools", "VSCode", "gitHub"]
  };
