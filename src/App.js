@@ -38,7 +38,7 @@ function App() {
   const [word, setWord] = useState("");
 
   //Cronometer
-  const [time, setTime] = useState(40); // Tempo inicial em segundos
+  const [time, setTime] = useState(60); // Tempo inicial em segundos
 
   useEffect(() => {
     if (gameStage === stages[1].name && time > 0) {
